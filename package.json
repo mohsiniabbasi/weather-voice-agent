@@ -1,0 +1,13 @@
+{
+  "name": "yokeru-weather-voice-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Weather-aware voice agent trial build: Retell voice agent + serverless webhooks (mid-call weather + post-call bookkeeping).",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "test:weather": "node scripts/test-weather.js"
+  }
+}
