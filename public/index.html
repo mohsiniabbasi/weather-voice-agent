@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather-Aware Voice Agent — API</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      background: #f6f8fa;
+      color: #1f2328;
+      display: flex;
+      justify-content: center;
+      padding: 2.5rem 1.25rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: #0d1117; color: #e6edf3; }
+      .card { background: #161b22 !important; border-color: #30363d !important; }
+      code { background: #21262d !important; }
+      .endpoint { border-color: #30363d !important; }
+      a { color: #6cb6ff !important; }
+    }
+    .wrap { width: 100%; max-width: 680px; }
+    h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
+    .sub { color: #59636e; margin: 0 0 1.75rem; }
+    .badge {
+      display: inline-block; font-size: .8rem; font-weight: 600;
+      color: #1a7f37; background: #dafbe1; border: 1px solid #b3e6c0;
+      padding: .1rem .55rem; border-radius: 999px; margin-bottom: 1rem;
+    }
+    .card {
+      background: #fff; border: 1px solid #d1d9e0; border-radius: 12px;
+      padding: 1.25rem 1.4rem; margin-bottom: 1rem;
+    }
+    .endpoint { border-top: 1px solid #eaeef2; padding: .85rem 0; }
+    .endpoint:first-of-type { border-top: none; padding-top: .25rem; }
+    .method {
+      font-size: .72rem; font-weight: 700; letter-spacing: .03em;
+      padding: .1rem .45rem; border-radius: 5px; margin-right: .5rem;
+      background: #ddf4ff; color: #0969da; vertical-align: middle;
+    }
+    .method.get { background: #dafbe1; color: #1a7f37; }
+    code { background: #eff2f5; padding: .12rem .4rem; border-radius: 5px; font-size: .9rem; }
+    .desc { color: #59636e; font-size: .92rem; margin: .35rem 0 0; }
+    footer { color: #59636e; font-size: .85rem; margin-top: .5rem; }
+    a { color: #0969da; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="badge">● Live</span>
+    <h1>Weather-Aware Voice Agent</h1>
+    <p class="sub">Call in, ask for the weather in any town. If it's below 10&nbsp;°C, you get a "bring a coat" reminder. This is the serverless API behind the voice agent — a functions-only deployment, so there's no app to click through here.</p>
+
+    <div class="card">
+      <div class="endpoint">
+        <span class="method">POST</span><code>/api/weather</code>
+        <p class="desc">Mid-call path. Geocodes the town, fetches the current temperature, applies the &lt;10&nbsp;°C rule, sends a reminder if cold, and returns a spoken sentence for the agent.</p>
+      </div>
+      <div class="endpoint">
+        <span class="method">POST</span><code>/api/call-webhook</code>
+        <p class="desc">Post-call path. Idempotent call logging (dedupes on <code>call_id</code>) with a dead-letter queue for failed writes.</p>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span><code>/api/reconcile</code>
+        <p class="desc">Missing-webhook detection. Flags calls that started but never received a <code>call_ended</code> event.</p>
+      </div>
+    </div>
+
+    <footer>
+      Retell (voice) → Vercel serverless functions → Open-Meteo (weather) → Twilio SMS, email fallback → Upstash Redis (state).
+      &nbsp;·&nbsp; <a href="https://github.com/mohsiniabbasi/weather-voice-agent">Source on GitHub</a>
+    </footer>
+  </div>
+</body>
+</html>
